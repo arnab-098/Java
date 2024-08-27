@@ -6,8 +6,9 @@ class Queue <T> {
 	private int rear, front, size;
 	private T[] values;
 
-	<T> T[] Queue() {
-		@SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
+
+	Queue() {
 		this.rear = this.front = -1;
 		this.size = 100;
 		this.values = (T[]) new Object[this.size];
