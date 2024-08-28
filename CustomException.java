@@ -2,9 +2,9 @@
 import java.util.*;
 
 
-public class CustomeException extends Exception{
+public class CustomException extends Exception{
   
-  public CustomeException(String s) {
+  public CustomException(String s) {
       super(s);
   }
 
@@ -13,14 +13,21 @@ public class CustomeException extends Exception{
 
 class Testing {
 
-  public static void main (String args) throws CustomeException{
-    Scanner sc = new Scanner(System.in);
-    int n = sc.nextInt();
-    if (n == 0) {
-      CustomeException("Invalid number")
+  public static void main (String[] args) throws CustomException{
+    try {
+      Scanner sc = new Scanner(System.in);
+      System.out.print("Enter a number: ");
+      int n = sc.nextInt();
+      if (n == 0) {
+        throw new CustomException("Invalid number");
+      }
+      else {
+        System.out.println("Hello World!");
+      }
     }
-    else {
-      System.out.println("Hello World!");
+    catch(CustomException e) {
+      System.out.println("ERROR");
+      System.out.println(e.getMessage());
     }
   }
 
