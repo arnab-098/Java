@@ -1,7 +1,7 @@
 
 import java.util.*;
 
-class Queue <T> {
+public class Queue <T> {
 
 	private int rear, front, size;
 	private T[] values;
@@ -62,7 +62,7 @@ class Queue <T> {
 }
 
 
-public class New {
+class QueueTest {
 
 	public static void main (String args[]) {
 		Queue<String> q = new Queue<String>();
