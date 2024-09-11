@@ -25,10 +25,11 @@ class Print {
 class myThread implements Runnable {
 
   public Thread th;
-  static Print p = new Print();
   private int result;
+  private Print p;
 
-  public myThread(String name) {
+  public myThread(String name, Print x) {
+    this.p = x;
     this.th = new Thread(this, name);
     this.th.start();
   }
@@ -51,8 +52,9 @@ public class ThreadTest {
 
   public static void main (String[] args) {
     System.out.println("Main thread running");
-    myThread th1 = new myThread("T1");
-    myThread th2 = new myThread("T2");
+    Print x = new Print();
+    myThread th1 = new myThread("T1", x);
+    myThread th2 = new myThread("T2", x);
     try {
       th1.th.join();
       System.out.println("T1 joined after termination");
