@@ -1,0 +1,108 @@
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+class myThread implements Runnable {
+
+  Thread thrd;
+  int[] nums;
+  int s;
+
+  myThread(String name, int[] arr) {
+    this.nums = arr;
+    this.s = 0;
+    thrd = new Thread(this, name);
+    thrd.start();
+  }
+
+  public void run() {
+    System.out.println(thrd.getName() + " is running");
+    for (int i=0; i<nums.length; i++) {
+      this.s += nums[i];
+    }
+  }
+
+  public int getSum() {
+    System.out.println(this.thrd.getName() + ": " + this.s);
+    return this.s;
+  }
+
+}
+
+public class GUITest implements ActionListener {
+
+  JLabel lbl;
+  JTextField text;
+  int[] values;
+  int size, index;
+
+  GUITest() {
+    this.size = 100;
+    this.index = 0;
+    this.values = new int[size];
+
+    JFrame frm = new JFrame();
+    frm.setSize(300, 300);
+    frm.setLayout(new FlowLayout());
+    frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    lbl = new JLabel("                                ");
+    text = new JTextField(5);
+    
+    JButton btn1 = new JButton("Add");
+    JButton btn2 = new JButton("Equal");
+    btn1.addActionListener(this);
+    btn2.addActionListener(this);
+
+    frm.add(text);
+    frm.add(btn1);
+    frm.add(btn2);
+    frm.add(lbl);
+    frm.setVisible(true);
+  }
+
+  public void actionPerformed(ActionEvent ae) {
+    if (ae.getActionCommand().equals("Add")) {
+      if (index == size) {
+        lbl.setText("No more values can be added!");
+      } else {
+        try {
+          int n = Integer.parseInt(text.getText());
+          System.out.println(n);
+          this.values[this.index++] = n;
+        } catch (NumberFormatException e) {
+          lbl.setText(e.getMessage());
+        }
+        text.setText("");
+      }
+    } else if (ae.getActionCommand().equals("Equal")) {
+      if (this.index == 0) {
+        lbl.setText("Sum: 0");
+      } else {
+        int pos = this.index/2;
+        int[] n1 = new int[pos];
+        int[] n2 = new int[this.index - pos];
+        n1 = Arrays.copyOfRange(this.values, 0, pos);
+        n2 = Arrays.copyOfRange(this.values, pos, this.index);
+        
+        myThread m1 = new myThread("T1", n1);
+        myThread m2 = new myThread("T2", n2);
+        try {
+          m1.thrd.join();
+          System.out.println(m1.thrd.getName() + " joined");
+          m2.thrd.join();
+          System.out.println(m2.thrd.getName() + " joined");
+        } catch (InterruptedException e) {
+          System.out.println("Thread inturrupted");
+        }
+        lbl.setText("Sum: " + (m1.getSum() + m2.getSum()));
+      }
+    }
+  }
+
+  public static void main(String[] args) {
+    new GUITest();
+  }
+
+}

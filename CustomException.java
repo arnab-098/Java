@@ -1,16 +1,6 @@
 
 import java.util.*;
 
-
-public class CustomException extends Exception{
-  
-  public CustomException(String s) {
-      super(s);
-  }
-
-}
-
-
 class Testing {
 
   public static void main (String[] args) throws CustomException{
