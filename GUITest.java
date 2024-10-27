@@ -32,7 +32,7 @@ class myThread implements Runnable {
 
 public class GUITest implements ActionListener {
 
-  JLabel lbl;
+  JLabel label;
   JTextField text;
   int[] values;
   int size, index;
@@ -47,7 +47,7 @@ public class GUITest implements ActionListener {
     frm.setLayout(new FlowLayout());
     frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    lbl = new JLabel("                                ");
+    label = new JLabel("                                ");
     text = new JTextField(5);
     
     JButton btn1 = new JButton("Add");
@@ -58,46 +58,62 @@ public class GUITest implements ActionListener {
     frm.add(text);
     frm.add(btn1);
     frm.add(btn2);
-    frm.add(lbl);
+    frm.add(label);
     frm.setVisible(true);
+  }
+
+  private void changeLabel() {
+    try {
+      int n = Integer.parseInt(this.text.getText());
+      System.out.println(n);
+      this.values[this.index++] = n;
+    } catch (NumberFormatException e) {
+      this.label.setText(e.getMessage());
+    }
+    this.text.setText("");
+  }
+
+  private void summation(int[] n1, int[] n2) {
+    myThread m1 = new myThread("T1", n1);
+    myThread m2 = new myThread("T2", n2);
+    try {
+      m1.thrd.join();
+      System.out.println(m1.thrd.getName() + " joined");
+      m2.thrd.join();
+      System.out.println(m2.thrd.getName() + " joined");
+    } catch (InterruptedException e) {
+      System.out.println("Thread inturrupted");
+      return;
+    }
+    this.label.setText("Sum: " + (m1.getSum() + m2.getSum()));
+  }
+
+  private void addPressed() {
+    if (this.index == this.size-1) {
+      this.label.setText("No more values can be added!");
+      return;
+    }
+    this.changeLabel();
+  }
+
+  private void eqaulPressed() {
+    if (this.index == 0) {
+      this.label.setText("Sum: 0");
+      return;
+    }
+    int pos = this.index/2;
+    int[] n1 = new int[pos];
+    int[] n2 = new int[this.index - pos];
+    n1 = Arrays.copyOfRange(this.values, 0, pos);
+    n2 = Arrays.copyOfRange(this.values, pos, this.index);
+    this.summation(n1, n2);
   }
 
   public void actionPerformed(ActionEvent ae) {
     if (ae.getActionCommand().equals("Add")) {
-      if (index == size) {
-        lbl.setText("No more values can be added!");
-      } else {
-        try {
-          int n = Integer.parseInt(text.getText());
-          System.out.println(n);
-          this.values[this.index++] = n;
-        } catch (NumberFormatException e) {
-          lbl.setText(e.getMessage());
-        }
-        text.setText("");
-      }
+      this.addPressed();
     } else if (ae.getActionCommand().equals("Equal")) {
-      if (this.index == 0) {
-        lbl.setText("Sum: 0");
-      } else {
-        int pos = this.index/2;
-        int[] n1 = new int[pos];
-        int[] n2 = new int[this.index - pos];
-        n1 = Arrays.copyOfRange(this.values, 0, pos);
-        n2 = Arrays.copyOfRange(this.values, pos, this.index);
-        
-        myThread m1 = new myThread("T1", n1);
-        myThread m2 = new myThread("T2", n2);
-        try {
-          m1.thrd.join();
-          System.out.println(m1.thrd.getName() + " joined");
-          m2.thrd.join();
-          System.out.println(m2.thrd.getName() + " joined");
-        } catch (InterruptedException e) {
-          System.out.println("Thread inturrupted");
-        }
-        lbl.setText("Sum: " + (m1.getSum() + m2.getSum()));
-      }
+      this.eqaulPressed();
     }
   }
 
