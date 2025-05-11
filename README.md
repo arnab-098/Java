@@ -1,6 +1,3 @@
-[![java-project · GitHub Topics · GitHub](https://images.openai.com/thumbnails/4049f8f70887e882d446c22e9af74eff.jpeg)](https://github.com/topics/java-project)
----
-
 # Java Code Repository
 
 A collection of Java programs demonstrating various concepts such as data structures, multithreading, GUI development, and custom exception handling.
